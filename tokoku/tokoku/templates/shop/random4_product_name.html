@@ -1,0 +1,12 @@
+<!--see:http://stackoverflow.com/questions/5457737/access-static-url-from-within-a-custom-inclusion-template-tag--->
+{% load staticfiles %}	
+<!--load staticfiles, is the key point for including images in inclusion tag-->
+{% for product in random4_product_name %}
+        <li><a href="{{ product.get_absolute_url }}" title="{{ product.name }}">
+		<img src="{% static 'media/' %}{{ product.imgthumb }}" width="100%">
+        </a></li>&nbsp;
+       <!--       <li><img src="{% static 'media/dckLogo.jpg' %}" class="img-rounded"></li>	-->
+{% endfor %}
+
+
+

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Toko Online eBlanja &middot;{% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-info">	<!-- info, success, warning, danger -->
+  <div class="panel-heading">
+   <h3 class="panel-title">Article Detail for {{ article.title }}.	       -- article_detail.html)<small>{% if request.user.is_admin %}<a href="{% url 'article-update' article.slug %}" class="pull-right">Edit</a><a href="{% url 'article-delete' article.slug %}" class="pull-right">Delete</a><a href="{% url 'article-add' %}" class="pull-right">AddNew</a>{% endif %}<a href="{% url 'article-list' %}" class="pull-right">List</a></small></h3>
+
+  </div><!-- end panel heading  -->
+   <div class="panel-body">
+
+<div class="well">
+<h2>{{ object.title}}</h2>
+<!-- <p><small>{# object.user #}&nbsp;{# object.created_at #}</small></p>	-->
+<p><small>{{ object.created_at }}</small></p>
+<br />
+<p>{{ object.content|safe }}</p>
+
+
+</div><!--/well-->
+
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+{% endblock %}
+	

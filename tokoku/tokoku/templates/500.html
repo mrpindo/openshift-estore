@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}{% trans 'Server error (500)' %}{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-danger">
+ <div class="panel-heading">
+   <h3 class="panel-title">500</h3>
+ </div><!-- end panel heading  -->
+  <div class="panel-body">
+
+<h1>'Server Error <em>(500)</em>'</h1>
+<p>"There's been an error. It's been reported to the site administrators via e-mail and should be fixed shortly. Thanks for your patience." </p>
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+{% endblock %}

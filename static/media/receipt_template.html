@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load catalog_filters %}
+
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-info">	<!-- info, success, warning, danger -->
+  <div class="panel-heading">
+   <h3 class="panel-title">Order Receipt</h3>
+  </div><!-- end panel heading  -->
+   <div class="panel-body">
+
+	<table id="receipt">
+		<caption>Your order has been placed!<br /><br />
+			Your Order Number is: {{ order.id }}
+		</caption>
+		<thead>
+		<tr>
+			<th scope="col">Name</th>
+			<th scope="col">Price</th>
+			<th scope="col">Quantity</th>
+			<th class="right" scope="col">Total</th>
+		</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="4" class="right" style="height:30px;">
+				Order Total: {{ order.total|currency }}
+				</td>
+			</tr>
+		</tfoot>
+		<tbody>
+		{% for item in order_items %}
+		<tr>
+			<td>{{ item.name }}</td>
+			<td>{{ item.price|currency }}</td>
+			<td>{{ item.quantity }}</td>
+			<td class="right">{{ item.total|currency }}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+{% endblock %}
+
+

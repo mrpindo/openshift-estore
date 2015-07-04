@@ -1,0 +1,9 @@
+{% for article in latest4_article_title %}
+        <li><a href="{{ article.get_absolute_url }}" title="{{ article.created_at }}">
+	<!--	<small>{/ article.title|truncatechars:"20" /}</small>	-->
+		{{ article.title }}
+        </a></li>
+{% endfor %}
+
+
+

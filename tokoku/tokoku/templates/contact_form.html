@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Toko Online eBlanja &middot; Hubungi kami{% endblock %}
+{% block content %}
+<script type="text/javascript" src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">Hubungi kami</h3>
+  </div><!-- end panel heading  -->
+    <div class="panel-body">
+
+
+<h4>{% trans "Contact us" %}</h4>
+<br>
+{% if form.errors %}
+<p style="color: red;">
+Please correct the error{{ form.errors|pluralize }} below.
+</p>
+{% endif %}
+
+<form action="" method="post">
+{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+  <div class="span6"></div><div class="pull right"><input type="submit" class="btn btn-primary" value="{% trans 'Submit' %}" name="sendemail"/></div>
+  </form>
+</form> 
+<hr>
+<small>
+Jl. H.R. Rasuna Said Blok K2, Kav.52 dan 64 Kuningan Jakarta 13911<br/>
+Telepon : 5555321 Ext. 1232,  Telepon / Facsimile : 5553122<br/>
+
+</small>
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+
+{% endblock %}

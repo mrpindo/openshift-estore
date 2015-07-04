@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en"> 
+  <head>
+    {% load i18n %}
+    <title>**DEMO**{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{{ MEDIA_URL }}dckLogo.jpg">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ STATIC_URL }}twitter-bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ STATIC_URL }}twitter-bootstrap/dist/css/offcanvas.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+
+
+
+<!-- start Google Analytcs https://support.google.com/analytics/answer/1008080?hl=en&utm_id=ad -->
+{% if ga_key %}
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-43263172-2', 'toko-drindo.rhcloud.com');
+  ga('send', 'pageview');
+
+</script>
+{% endif %}
+<!-- end Google Analytcs -->
+
+
+  </head>
+
+  <body>
+<!--    <div class="navbar navbar-default navbar-fixed-top" role="navigation">	-->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'home' %}" rel="tooltip" data-placement="bottom" title="Beranda">Blanja <img alt="" src="{{ MEDIA_URL }}dckLogo.jpg" style="height:20px"></a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+<!--            <li><a href="{% url 'home' %}" rel="tooltip" data-placement="bottom" title="Awal">{% trans "Home" %}</a></li>	-->
+              <li><a href="{% url 'about' %}" rel="tooltip" data-placement="bottom" title="Selintas">{% trans "About" %}</a></li>
+              <li><a href="{% url 'contact_us' %}" rel="tooltip" data-placement="bottom"
+ title="Hubungi kami">{% trans "Contact" %}</a></li>
+            <li><a href="{% url 'faq' %}" rel="tooltip" data-placement="bottom"
+ title="Pertanyaan">{% trans "FAQ" %}</a></li>
+              <li><a href="{% url 'shop.views.show_all_category' %}" rel="tooltip" data-placement="bottom" title="Belanja nyaman">{% trans "Shopping" %}</a></li>
+              <li><a href="{% url 'order-list' %}" rel="tooltip" data-placement="bottom" title="Status Order">Status Order</a></li>
+
+          </ul>
+
+          <ul class="navbar-form navbar-left">
+          <form class="navbar-search" action="{% url 'search' %}" method="get">
+          <input type="text" name="q" class="input-medium search-query" placeholder="{% trans 'Search' %}">
+          </form>
+	  </ul>
+
+
+<!--is Authenticated?-->
+            {% if user.is_authenticated %}
+                <ul class="nav navbar-nav">
+                <li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.email }} <span class="caret"></span></a>
+			<ul class="dropdown-menu pull-right" role="menu">
+                  <li role="presentation"><a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a></li> 
+                  <li role="presentation"><a href="{% url 'password_change' %}">{% trans "Change password" %}</a></li>
+			</ul><!-- /drop down -->
+                </li><!-- /drop down -->
+                </ul><!-- /nav navbar-nav -->
+            {% else %}
+                <ul class="nav navbar-nav">
+                <li><a href="{% url 'django.contrib.auth.views.login' %}">Log in</a></li>
+                </ul>
+ {% endif %}
+<!--end Authenticated-->
+
+
+
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </div><!-- /.navbar -->
+
+	<br />		<!-- </ul> is not work as expected!  -->
+
+    {% block contentgrid %}{% endblock %}
+
+    <div class="container-fluid">
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-10">
+
+<!--flash Message -Works Beautifully-->
+<!-- Bootstrap support 4 alert tag: success, info, warning, danger -->
+
+		<div>
+		{% if messages %}
+		<ul class="messages">
+		    {% for message in messages %}		
+			<!-- trick boostrap to use danger tag on django error tag -->
+         		{% if message.tags == 'error' %}		
+                    <div class="alert alert-danger fade in">	
+   			{% else %}
+                    <div class="alert alert-{{ message.tags }} fade in">
+          		{% endif %}
+
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                    </div>
+		    {% endfor %}
+		</ul>	
+		{% endif %}
+		</div>		
+
+
+
+<!--end flash Message -->
+
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+
+
+<!--          Main block content    -->
+            {% block content %}block-content{% endblock %}
+<!--          </div>      -->
+
+          <div class="row">
+<!-- Etalase -->
+{% load shoptags %}
+{% shop_etalase %} 
+<!-- end Etalase -->
+
+
+          </div><!--/row-->
+        </div><!--/span-->
+
+        <div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <small>
+              <span class="badge"><li class="nav-header">Shopping Cart :</li></span>
+<!--          <li>{/ load shoptags /}{/ cart_box request /}<span class="glyphicon glyphicon-shopping-cart"></span></li>	load shoptags already called at line 135-->
+              <li>{% cart_box request %}<span class="glyphicon glyphicon-shopping-cart"></span></li>
+              <li><a href="{% url 'shop_map' %}">Shopping Map</a></li>
+	      &nbsp;
+
+	      <span class="badge"><li class="nav-header">Sidebar, Good :</li></span>
+              <li><a href="/search/">Search Books</a></li>
+              <li><a href="/publishers/">Book Publisher</a></li>
+              <li><a href="/authors/">Authors List</a></li>
+              <li><a href="/entry_author/">Add new author</a></li>
+              <li><a href="/manage_authors/">Manage All Books Author </a></li>
+              <li><a href="/geo/">Goename List</a></li>
+              <li><a href="/polls/">Polling</a></li>
+              <li><a href="/time/">Current time</a></li>&nbsp;
+              </small>
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <small>
+	      <span class="badge"><li class="nav-header">Artikel Anyar :</li></span>
+              {% load articletags %}{% latest4_article_title %}&nbsp;
+	      <span class="badge"><li class="nav-header">Produk Pilihan :</li></span>
+	      {% random4_product_name %}
+	      <span class="badge"><li class="nav-header">Product Terlaris :</li></span>
+	      {% bestselling4_product_name %}
+              </small>
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+	      <li class="nav-header"><span class="badge">Another Sidebar :</span></li>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+      </div><!--/row-->
+
+ </div><!--/container-->
+
+    <div class="container-fluid">
+
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="well">
+
+<!--ArticleTeaser-->
+
+
+              {% load articletags %}{% random4_article_teaser %}
+
+
+<!--/ArticleTeaser-->
+
+            {% block contentteaser %}{% endblock %}
+
+<p><small>...Available for advertisement...</small></p>
+
+        </div><!--/span12-->
+      </div><!--/row-->
+
+      <hr>		
+      <footer>
+        <p>&copy; Blanja 2014</p>
+      </footer>
+
+    </div><!--/.container-->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/offcanvas.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("[rel=tooltip]").tooltip();
+      });
+    </script>
+
+
+
+  </body>
+</html>

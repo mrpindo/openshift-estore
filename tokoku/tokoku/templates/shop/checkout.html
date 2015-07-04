@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Toko Online eBlanja &middot; Checkout{% endblock %}
+{% load checkout_tags %}
+
+{% block content %}
+
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+<script src="{{ STATIC_URL }}shop/js/shipping_fields.js"></script>
+
+<div class="panel panel-info">	<!-- info, success, warning, danger -->
+  <div class="panel-heading">
+   <h3 class="panel-title">Order Detail</h3>
+  </div><!-- end panel heading  -->
+   <div class="panel-body">
+
+
+{% if not request.user.is_authenticated %}
+<div class="fr">
+	<a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.path }}">
+	Have an account?<br />Sign in now!
+	</a>
+</div>
+{% endif %}
+<h1>Checkout</h1>
+{% if error_message %}
+	<ul class="errorlist">
+		<li>{{ error_message }}</li>
+	</ul>
+{% endif %}
+<form action="." method="post" id="checkout-form">{% csrf_token %}
+	<fieldset class="checkout">
+		<legend>Contact Info</legend>
+		<table>
+		{% form_table_row form.email %}
+		{% form_table_row form.phone %}
+		</table>
+	</fieldset>
+	<fieldset class="checkout">
+		<legend>Shipping Info</legend>
+		<table>
+		{% form_table_row form.shipping_name %}
+		{% form_table_row form.shipping_address_1 %}
+		{% form_table_row form.shipping_address_2 %}
+		{% form_table_row form.shipping_city %}
+		{% form_table_row form.shipping_state %}
+		{% form_table_row form.shipping_zip %}
+		{% form_table_row form.shipping_country %}
+		</table>
+	</fieldset>
+	<fieldset class="checkout">
+		<legend>Billing Info</legend>
+		<table>
+		{% form_table_row form.same_billing_shipping %}
+		</table>
+		<div id="billing_fields"><table>
+		{% form_table_row form.billing_name %}
+		{% form_table_row form.billing_address_1 %}
+		{% form_table_row form.billing_address_2 %}
+		{% form_table_row form.billing_city %}
+		{% form_table_row form.billing_state %}
+		{% form_table_row form.billing_zip %}
+		{% form_table_row form.billing_country %}
+		</table></div>
+	</fieldset>
+	<fieldset class="checkout">
+		<legend>Additional Instructions</legend>
+		<table>
+		{% form_table_row form.additional_instructions %}
+		</table>
+	</fieldset>
+	<table>
+	<tr>
+		<th colspan="2">
+			<input type="submit" value="Place Order" class="submit" />
+		</th>
+	</tr>
+	</table>
+</form>
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Terimakasih{% endblock %}
+{% load i18n %}
+
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-success">
+   <div class="panel-heading">
+<!--          <h3 class="panel-title">Logout, Terimakasih</h3>	-->
+   </div><!-- end panel heading  -->
+  <div class="panel-body">
+
+    <div class="content">
+<!--        <h3>{% trans "Thanks for spending some quality time with the Web site today." %}</h3>   -->
+        <h4>Terimakasih, anda telah meluangkan waktu di toko kami yang nyaman ini.</h4>
+
+    </div>
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+{% endblock %}

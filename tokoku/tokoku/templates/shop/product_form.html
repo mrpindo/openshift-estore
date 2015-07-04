@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block title %}Tambahkan/Edit Produk  (This form used by CreateView and UpdateView)(product_form.html) {% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-info">	<!-- info, success, warning, danger -->
+  <div class="panel-heading">
+
+{% if product.name %}
+   <h3 class="panel-title"> Edit {{ product.name }}. Tambahkan/Edit Produk </h3>
+
+{% else %}
+
+   <h3 class="panel-title">Tambahkan Produk Baru </h3>
+
+{% endif %}
+
+
+  </div><!-- end panel heading  -->
+   <div class="panel-body">
+
+<link rel="stylesheet" href="{{ STATIC_URL }}Jcrop/css/jquery.Jcrop.css" type="text/css" />
+<script src="{{ STATIC_URL }}Jcrop/js/jquery.Jcrop.js"></script>
+
+
+
+<div class="row">
+  <div class="col-md-6"><!--kolom1-->
+	<form id="imgbox">
+	  <img id="uploadPreview" style="width: 100%; height: auto; border: 1px solid #000;"/>	
+	</form><!--end imgbox form -->
+  </div><!--end kolom1-->
+
+
+<div class="col-md-6"><!--kolom2-->   
+
+<form id="coordsform" style="display: none;">
+    <div id="coords" class="inline-labels"><small>
+    <label>X1 <input type="text" size="2" id="x1" name="x1" /></label>
+    <label>Y1 <input type="text" size="2" id="y1" name="y1" /></label>
+    <label>X2 <input type="text" size="2" id="x2" name="x2" /></label>
+    <label>Y2 <input type="text" size="2" id="y2" name="y2" /></label>
+    <label>W <input type="text" size="2" id="w" name="w" /></label>
+    <label>H <input type="text" size="2" id="h" name="h" /></label>
+    <label>ImgW <input type="text" size="2" id="imgw" name="imgw" /></label>
+    <label>ImgH <input type="text" size="2" id="imgh" name="imgh" /></label>
+    </small></div>
+</form>
+
+<form id="add_product" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+<!--	{{ form.as_p }}		-->
+	<table>
+		{{ form.as_table }}
+	</table>
+	<input type="submit" class="btn btn-primary" value="Submit" />&nbsp;<button type="reset" class="btn btn-warning">Cancel</button>
+</form>
+
+</div><!--end kolom2-->
+
+</div><!--end row-->
+
+
+
+<script type="text/javascript">
+
+{% if product.name %}
+    document.getElementById("uploadPreview").src = "{{ MEDIA_URL }}{{ product.imgfile }}"
+{% endif %}
+
+
+var jcrop_api, boundx, boundy;
+
+function clearPreview() {
+  jQuery(function($){
+    $('#imgbox').empty();	//OK, Clear all iside #imgbox
+    $('#imgbox').append("<img id='uploadPreview' style='width: 100%; height: auto; border: 1px solid #000;'/>");
+
+    if (typeof jcrop_api != 'undefined') {
+    jcrop_api.destroy();
+    } else {
+    //alert('Jcrop is undefined!');
+    }
+
+  });
+};
+
+
+//Are these necessary?
+//    var oFReader = new FileReader();
+//    oFReader.readAsDataURL(document.getElementById("myfile").files[0]);
+
+//    oFReader.onload = function (oFREvent) {
+//        document.getElementById("uploadPreview").src = oFREvent.target.result;
+//    };
+
+
+function PreviewImage() {	//start PreviewImage
+
+	clearPreview();   //Clear Preview imgbox
+
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("id_imgfile").files[0]);
+
+/**
+        oFReader.onload = function (oFREvent) {
+            document.getElementById("uploadPreview").src = oFREvent.target.result;
+        };
+**/
+
+//restrict filetype to only jpg/png
+
+	  jQuery(function($){
+              // get selected file
+	      var oFile = $('#id_imgfile')[0].files[0];
+              // check for image type (jpg and png are allowed)
+              var rFilter = /^(image\/jpeg|image\/png)$/i;
+              if (! rFilter.test(oFile.type)) {
+                  //$('.error').html('Please select a valid image file (jpg and png are allowed)').show();
+	          alert('Please select a valid image file (jpg and png are allowed)');
+                  return;
+              }
+	      // check for max file size
+	      //if (oFile.size > 250 * 1024) {
+	      if (oFile.size > 1024 * 1024) {
+	          alert('You have selected too big file, please select a one smaller image file, less than 1024 * 1024.');
+	          return;
+	      }
+	      // check for min file size
+	      //if (oFile.size < 256 * 256) {		//Works!	
+	      if (oFile.size < 20480) {			//Works!
+	          alert('You have selected too small file, please select a one bigger image file, more than 20Kb');
+	          return;
+	      }
+
+		//load image 
+	        oFReader.onload = function (oFREvent) {
+	            document.getElementById("uploadPreview").src = oFREvent.target.result;
+	        };
+
+		playJcrop();
+
+	   });
+
+//end restrict
+        
+        
+  function playJcrop() {			//start playJcrop
+
+        // destroy Jcrop if it is existed	//Already done in line 54!
+        //if (typeof jcrop_api != 'undefined') {
+        //     jcrop_api.release();
+        //     jcrop_api.disable();
+        //     jcrop_api.destroy();
+        //}
+
+        setTimeout(function(){		//start timeout
+
+	  jQuery(function($){
+
+	    $('#uploadPreview').Jcrop({
+	      // start off with jcrop-light class
+	      bgOpacity: 0.5,
+	      //bgColor: 'white',
+	      bgColor: 'black',		//better
+	      addClass: 'jcrop-light',
+              onChange:   showCoords,
+              onSelect:   showCoords,
+              onRelease:  clearCoords
+	    },function(){
+	      // Use the API to get the real image size
+              var bounds = this.getBounds();
+              boundx = bounds[0];
+              boundy = bounds[1];
+              //Store the API in the jcrop_api variable
+	      jcrop_api = this;
+	      //jcrop_api.setSelect([130,65,130+350,65+285]);   //better algorithm
+	      jcrop_api.animateTo([100,10,280,210]);
+	      jcrop_api.setOptions({ bgFade: true });
+	      jcrop_api.ui.selection.addClass('jcrop-selection');
+              jcrop_api.setOptions({ allowSelect: false });
+              jcrop_api.setOptions({ aspectRatio: 7/8 });
+              jcrop_api.setOptions({ allowResize: true });
+              jcrop_api.setOptions({ minSize: [70, 80] });
+	    });
+	  });
+             $('#imgw').val(parseInt($("#uploadPreview").width()));
+             $('#imgh').val(parseInt($("#uploadPreview").height()));
+             $('#id_img_w').val(parseInt($("#uploadPreview").width()));
+             $('#id_img_h').val(parseInt($("#uploadPreview").height()));
+        },3000);				//end timeout
+
+           $('#coords').on('','input',function(e){
+             var x1 = $('#x1').val(),
+                 x2 = $('#x2').val(),
+                 y1 = $('#y1').val(),
+                 y2 = $('#y2').val();
+             jcrop_api.setSelect([x1,y1,x2,y2]);
+           });
+           function showCoords(c)
+           {
+             $('#x1').val(parseInt(c.x));
+             $('#y1').val(parseInt(c.y));
+             $('#x2').val(parseInt(c.x2));
+             $('#y2').val(parseInt(c.y2));
+             $('#w').val(parseInt(c.w));
+             $('#h').val(parseInt(c.h));	
+           };
+
+
+           function clearCoords()
+           {
+             $('#coords input').val('');
+           };
+
+  };         //end playJcrop
+
+
+};	//end Preview Image
+
+
+
+window.onload = function() {
+//alert(typeof jcrop_api);
+     document.getElementById("uploadPreview").style.type = 'hidden';
+     document.getElementById("id_imgfile").onchange = function()
+     {
+        PreviewImage();
+	//alert('Hey YOU!');	//Works, Thanks
+     };
+     document.getElementById("add_product").onsubmit = function()
+     {
+	//alert('Hey YOU just submitted it!');	//Works, Thanks
+			var formdata = {};
+			$('#coordsform')
+			    .each(function(i, el) {
+			        $(el).find('input')
+			            .each(function(i, el) {
+			                var name  = $(el).attr('name');
+			                var value = $(el).val();
+			                formdata[name] = value;
+			            });
+			    });
+		//alert(JSON.stringify(formdata));	//Works
+        $('#id_clientImgAttrs').val(JSON.stringify(formdata));
+     };
+}; 
+</script> 
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+{% endblock %}

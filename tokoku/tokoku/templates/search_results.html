@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Search results" %}{% endblock %}
+
+
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+<div class="panel panel-default">
+  <div class="panel-body">
+
+<legend>Anda mencari: <strong>{{ query_string }}</strong>, dan hasilnya adalah sebagai berikut: </legend>
+
+<!-- Hight priority, add search-result url for displaying related document -->
+
+<p>
+{% if found_entries %}
+    {% for Product in found_entries %}
+   <li><a href="{{ Product.get_absolute_url }}">{{ Product.name }}</td></a></li>         
+    {% endfor %}
+{% else %}
+          <li>[Tidak ada]</li>         
+{% endif %}
+</p>
+
+
+(search_results.html)
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+{% endblock %}

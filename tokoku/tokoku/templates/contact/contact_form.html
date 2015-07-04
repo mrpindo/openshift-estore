@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}please fill in our contact form{% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/docs/assets/js/jquery.js"></script>
+    <h1>Contact us</h1>
+
+    {% if errors %}
+      <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form action="/contact/" method="post">{% csrf_token %}
+      <p>Subject: <input type="text" name="subject" value="{{ subject }}"></p>
+      <p>Your Email (optional):
+      <input type="text" name="Email" value="{{ email }}">
+        </p>
+          <p>Message:
+            <textarea name="message" rows="10" cols="50">
+              **{{ message }}**
+            </textarea>
+        </p>
+      <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}

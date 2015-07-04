@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Add new book author{% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/docs/assets/js/jquery.js"></script>
+    <h1>Add new book author</h1>
+
+    {% if errors %}
+      <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form action="/entry_author/" method="post">{% csrf_token %}
+      <p>First Name: <input type="text" name="first_name" value="{{ first_name }}"></p>
+      <p>Last Name: <input type="text" name="last_name" value="{{ last_name }}"></p>
+      <p>Email (optional):
+      <input type="text" name="Email" value="{{ email }}">
+        </p>
+      <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}

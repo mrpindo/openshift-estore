@@ -1,0 +1,12 @@
+{% with cart_item_count as cart_count %}
+  {% if cart_count > 0 %}
+    <b><a href="{% url 'show_cart' %}">
+        {{ cart_count }} Item{{ cart_count|pluralize }} in Cart: Rp {{ cart_subtotal|floatformat }}
+    </a></b>
+  {% else %}
+    <a href="{% url 'show_cart' %}">
+        {{ cart_count }} Item{{ cart_count|pluralize }} in Cart
+    </a>
+  {% endif %}
+{% endwith %}
+

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Article List{% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-info">	<!-- info, success, warning, danger -->
+  <div class="panel-heading">
+   <h3 class="panel-title">Daftar Artikel  <small>(Daftar semua artikel yang ada saat ini.)</small></h3>
+  </div><!-- end panel heading  -->
+   <div class="panel-body">
+ 
+
+<h1>Listing Artikel</h1>
+<table id="article_list" class="table table-striped table-hover table-condensed">
+         <thead>
+           <tr>
+                <th>No</th>
+                <th>Judul</th>
+                <th>Konten</th>
+           </tr>
+	</thead>
+<tbody>
+
+    <div class="pagination-right">
+      <ul class="pager">
+        {% if page_obj.has_previous %}
+            <li><a href="?page=1">&laquo;</a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}">&lsaquo;</a></li>
+        {% else %}
+           <li class="disabled">
+               <a href="#">&laquo;</a>
+               <a href="#">&lsaquo;</a>
+           </li>
+        {% endif %}
+
+        <span class="current">
+            <li>Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}.</li>
+        </span>
+
+        {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">&rsaquo;</a></li>
+            <li><a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a></li>
+        {% else %}
+           <li class="disabled">
+               <a href="#">&rsaquo;</a>
+               <a href="#">&raquo;</a>
+           </li>
+        {% endif %}
+      </ul>
+    </div>
+
+
+
+{% for article in object_list %}
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <td><a href="{% url 'article-detail' article.slug %}">{{ article.title }}</a><br/><small>{{ article.created_at|date:"M/d" }}</small></td>  
+<!--    <td><a href="{% url 'article-detail' article.slug %}">{{ article.title }}</a><br/><small>{{ article.user }}</small><br/><small>{{ article.created_at|date:"M/d" }}</small></td>  -->
+
+<!--    <td>{/ article.content|truncatechars:"200"|safe /}</td> 	-->
+    <td>{{ article.content|truncatewords:"30"|safe }}</td> 	
+
+
+
+</tr>
+{% empty %}
+<ul>
+    <li>No articles yet.</li>
+</ul>
+{% endfor %}
+
+
+</tbody>
+
+</table>
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+{% endblock %}

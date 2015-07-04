@@ -1,0 +1,10 @@
+{% for article in latest4_article_teaser %}
+            <div class="col-md-3">
+              <h2>{{ article.title }}</h2>
+              <p><small>{{ article.content|truncatewords:"50"|safe }}</small></p>
+              <p><a class="btn btn-default" href="{{ article.get_absolute_url }}">Lihat detil &raquo;</a></p>
+	    </div><!--/class-->
+{% endfor %}
+
+
+

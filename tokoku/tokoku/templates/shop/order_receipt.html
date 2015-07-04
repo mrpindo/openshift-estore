@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Toko Online eBlanja &middot;{% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-info">	<!-- info, success, warning, danger -->
+  <div class="panel-heading">
+   <h3 class="panel-title">Receipt for Order Number: {{ order.id }}. (Order status: {{ order.get_status_display }}	       -- order_receipt.html)</h3>
+
+  </div><!-- end panel heading  -->
+   <div class="panel-body">
+
+<div class="row">
+
+<!--Temporray disabled
+session_id: {/ session_id /} length of order id: {/ lenoi /}
+-->
+
+<br />
+<br />
+
+            {% if lenoi > 0 %}
+
+	<table id="receipt" class="table table-striped table-hover table-condensed">
+		<caption>Your order has been placed!<br /><br />
+			Your Order Number is: {{ order.id }}. (Order status: <b>{{ order.get_status_display }}</b>)
+		</caption>
+
+		<thead>
+		<tr>
+                	<th>Item</th>
+                	<th style="text-align:right">Harga (Rp)</th>
+                	<th style="text-align:right">Jumlah</th>
+                	<th style="text-align:right">Total (Rp)</th>
+		</tr>
+		</thead>
+		<tfoot>
+			<tr>
+			<th colspan="2"></th>
+			<th  style="text-align:right" colspan="1">Order Total (Rp):</th>
+			<th  style="text-align:right">
+					{{ order.total|floatformat }}
+			</th>
+			</tr>
+		</tfoot>
+
+		<tbody>
+		{% for item in order_items %}
+		<tr>
+			<td>{{ item.name }}</td>
+			<td style="text-align:right">{{ item.price|floatformat }}</td>
+			<td style="text-align:right">{{ item.quantity }}</td>
+			<td style="text-align:right">{{ item.total|floatformat }}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+(Order receipt also sent to your email address.)
+
+	           {% else %}
+(No order item available.)
+                   {% endif %}
+
+
+</div><!--/row-->
+<br/>
+<p class="pull-right">
+   <a href="{% url 'paypalrest-add' order.id %}" type="button" class="btn btn-primary btn-xs">Lakukan Pembayaran</a>
+</p>
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+{% endblock %}
+	

@@ -1,0 +1,21 @@
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Inspirasi</h3>
+        </div><!-- end panel heading  -->
+	    <div class="panel-body">
+
+          <div class="row">
+{% for article in random4_article_teaser %}
+<!--            <div class="col-md-3">	-->
+            <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+              <h3>{{ article.title }}</h3>
+              <p>{{ article.content|truncatewords:"50"|safe }}</p>
+              <p><a class="btn btn-default" href="{{ article.get_absolute_url }}">Lihat detil &raquo;</a></p>
+	    </div><!--/class-->
+{% endfor %}
+          </div><!--/row-->
+
+  </div><!-- end panel body  -->
+</div><!-- end panel panel -->
+
+

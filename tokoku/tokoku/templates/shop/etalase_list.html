@@ -1,0 +1,41 @@
+
+
+{% block customcontent %}
+<!--disabled, since this list available on every page! jquery supplied by any other .html
+ <script type="text/javascript" src="{{ STATIC_URL }}twitter-bootstrap-new/dist/js/jquery.js"></script>
+-->
+
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Etalase Produk</h3>
+        </div><!-- end panel heading  -->
+	    <div class="panel-body">
+
+<p><a href="{% url 'shop.views.show_all_category' %}" role="button" class="btn btn-success btn-xs" >Semua Produk &raquo;</a></p>
+
+
+<div class="row">
+    {% for product in etalase_list %}
+  <div class="col-lg-2 col-sm-3 col-xs-4">	
+        <a href="{{ product.get_absolute_url }}" class="thumbnail" title="Detil">
+	{% if product.imgfile == "" %}
+      		<img src="{{ MEDIA_URL }}products/thumbnails/no_photo.jpg" class="img-rounded" width="100%">
+	{% else %}
+      		<img src="{{ MEDIA_URL }}{{ product.imgthumb }}" class="img-rounded" width="100%">	
+	{% endif %}
+        </a>
+
+         	<span class="badge"><small>{{ product.name|truncatechars:"15" }}  {{ 'Rp' }} {{ product.price|floatformat }}</small></span>
+		<p><a href="{% url 'cartItem-add' product.slug %}" class="btn btn-xs" title="Beli"><span class="glyphicon glyphicon-shopping-cart"></a> 
+           	   <a href="{{ product.get_absolute_url }}" class="btn btn-xs" title="Detil"><span class="glyphicon glyphicon-check"></a></p>
+  </div><!--/class col -->
+
+    {% endfor %}
+</div><!--/row -->
+
+  </div><!-- end panel body  -->
+</div><!-- end panel panel -->
+
+
+{% endblock %}
+

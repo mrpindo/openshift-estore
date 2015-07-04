@@ -1,0 +1,68 @@
+
+{% extends "base.html" %}
+{% block title %}Toko Online eBlanja &middot; Semua kategori{% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Daftar Produk, Semua Kategori</h3>
+        </div><!-- end panel heading  -->
+	    <div class="panel-body">
+
+    <div class="pagination-right">
+      <ul class="pager">
+        {% if products.has_previous %}
+            <li><a href="?page=1">&laquo;</a></li>
+            <li><a href="?page={{ products.previous_page_number }}">&lsaquo;</a></li>
+        {% else %}
+           <li class="disabled">
+               <a href="#">&laquo;</a>
+               <a href="#">&lsaquo;</a>
+           </li>
+        {% endif %}
+
+        <span class="current">
+            <li>Halaman {{ products.number }} dari {{ products.paginator.num_pages }}.</li>
+        </span>
+
+        {% if products.has_next %}
+            <li><a href="?page={{ products.next_page_number }}">&rsaquo;</a></li>
+            <li><a href="?page={{ products.paginator.num_pages }}">&raquo;</a></li>
+        {% else %}
+           <li class="disabled">
+               <a href="#">&rsaquo;</a>
+               <a href="#">&raquo;</a>
+           </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="row">
+        {% for p in products %}
+
+      <div class="col-lg-2 col-sm-3 col-xs-4">
+
+            <a href="{{ p.get_absolute_url }}" class="thumbnail" title="Detil">
+	{% if p.imgfile == "" %}
+      		<img src="{{ MEDIA_URL }}products/thumbnails/no_photo.jpg" class="img-rounded" width="100%">
+	{% else %}
+      		<img src="{{ MEDIA_URL }}{{ p.imgthumb }}" class="img-rounded" width="100%">	
+	{% endif %}
+	    </a>
+
+        	<span class="badge"><small>{{ p.name|truncatechars:"15" }}  {{ 'Rp' }} {{ p.price|floatformat }}</small></span>
+	        <p><a href="{% url 'cartItem-add' p.slug %}" class="btn btn-xs"  title="Beli"><span class="glyphicon glyphicon-shopping-cart"></a> 
+	           <a href="{{ p.get_absolute_url }}" class="btn btn-xs" title="Detil"><span class="glyphicon glyphicon-check"></a></p>
+      </div><!--/class col -->
+
+    {% endfor %}
+    </div><!--end row  -->
+
+    <p>{{ products.paginator.count }} products </p>
+
+  </div><!-- end panel body  -->
+</div><!-- end panel panel -->
+
+{% endblock %}
+

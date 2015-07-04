@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Toko Online eBlanja &middot; {{ p.name}}{% endblock %}
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+<div class="panel panel-info">	<!-- info, success, warning, danger -->
+  <div class="panel-heading">
+   <h3 class="panel-title">{{ p.name }}	
+
+<small>{% if request.user.is_admin %}<a href="{% url 'product-delete' p.slug %}" class="pull-right"> Delete</a><a href="{% url 'product-update' p.slug %}" class="pull-right">Edit</a><a href="{% url 'product-add' %}" class="pull-right">AddNew</a>{% endif %}<a href="{% url 'product-list' %}" class="pull-right">Listing</a></small>
+
+   </h3>
+
+  </div><!-- end panel heading  -->
+   <div class="panel-body">
+
+<div class="row">
+  <div class="col-6 col-sm-6 col-md-6 col-lg-6"><!--kolom1-->
+    {% if p.imgfile == "" %}
+    <img src="{{ MEDIA_URL }}products/main/no_photo.jpg" alt="{{ p.name}}" style="width: 100%; height: auto;" />
+    {% else %}
+    <img src="{{ MEDIA_URL }}{{ p.imgfile }}" alt="{{ p.name}}" style="width: 100%; height: auto;"/>
+    {% endif %}
+
+
+    {% for c in categories %}
+        {% if c.slug == "3d-model-plan" %}	<!--previously "house-plan"-->
+	<link href="{{ STATIC_URL }}x3dom/x3dom.css" rel="stylesheet">
+	<script type='text/javascript' src="{{ STATIC_URL }}x3dom/x3dom.js"></script>
+	<p>
+	<button class="btn btn-primary" data-toggle="modal" data-target=".bs-modal-sm">Show 3D</button>
+	</p>
+	{% endif %}	
+      {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+
+  </div><!--/kolom1-->
+
+  <div class="col-6 col-sm-6 col-md-6 col-lg-6"><!--kolom2-->
+    <br />
+<table>
+<tr><th><label>Brand :</label></th><td><em>{{ p.brand }}</em></td></tr>
+<tr><th><label>SKU :</label></th><td>{{ p.sku }}</td></tr>
+	<tr><th><label>In categor{{ categories.count|pluralize:"y,ies" }} :
+	</label></th>{% for c in categories %}
+		<td><a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+	    		{% if not forloop.last %}, {% endif %}
+		</td>{% endfor %}</tr>
+
+<tr><th><label>Price :</label></th><td>Rp {{ p.price|floatformat }}</td></tr>
+<tr><th>
+    <form method="post" action="." class="cart">{% csrf_token %}
+    {{ form.as_p }}
+
+</th>
+<td><input type="submit" class="btn btn-primary btn-xs" value="Add To Cart" name="submit" alt="Add To Cart" /></td>
+    </form>
+</tr>
+
+</table>
+<br />
+    <h4>Product Description</h4>
+    {{ p.description }}
+<br />
+
+
+  </div><!--/kolom2-->
+</div><!--/row-->
+
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+<!--3D Model-->
+    {% for c in categories %}
+        {% if c.slug == "3d-model-plan" %}	<!--previously "house-plan"-->
+
+<div class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">3D Model</h4>
+      </div>
+      <div class="modal-body">
+
+		{% with "3DWorks/x3ds/"|add:p.slug|add:".html" as x3dTemplate %}
+		{% include x3dTemplate %}
+		{% endwith %}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
+
+	{% endif %}	
+      {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+
+
+{% endblock %}
+	

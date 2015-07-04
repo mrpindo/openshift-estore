@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Toko Online eBlanja &middot; Masuk{% endblock %}
+{% load i18n %}
+
+{% block content %}
+<script src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+
+      <div class="panel panel-success">
+        <div class="panel-heading">
+<!--          <h3 class="panel-title">Masuk</h3>	-->
+        </div><!-- end panel heading  -->
+  <div class="panel-body">
+
+    <div class="content">
+        {% if form.errors %}
+            <div class="alert alert-warning fade in">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                <p><strong>{% trans "Oh snap!" %}</strong> {% trans "Please enter a correct username and password. Note that both fields are case-sensitive." %}</p>
+            </div>
+        {% endif %}
+        <form action="{% url 'django.contrib.auth.views.login' %}" method="post" id="login-form">{% csrf_token %}
+            <fieldset>
+                <legend>{% trans 'Log in' %}</legend>
+                {% for field in form %}
+                    {% include 'myauth/form_field.html' %}
+                {% endfor %}
+                <div class="actions">
+                    <input type="submit" class="btn btn-primary" value="{% trans 'Log in' %}">&nbsp;<button type="reset" class="btn btn-warning">{% trans 'Cancel' %}</button>
+              <!-- The following hidden input will take care the '?next' page, cool -->
+                    <input type="hidden" name="next" value="{{ next|escape }}" />
+                </div>
+            </fieldset>
+        </form>
+   <p><a href="{% url 'django.contrib.auth.views.password_reset' %}">{% trans "Reset my password" %}</a></p>
+        <script type="text/javascript">
+            $(function(){
+                $(".alert-message").alert();
+                $('#mainForm').submit(function(){
+                    $('#submit').button('loading');
+                })
+            });
+            document.forms[1].elements[2].focus();
+        </script>
+    </div>
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}3D Horse Inline{% endblock %}
+
+{% block content %}
+<link href="{{ STATIC_URL }}x3dom/x3dom.css" rel="stylesheet">
+<script type="text/javascript" src="{{ STATIC_URL }}twitter-bootstrap/dist/js/jquery.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL }}x3dom/x3dom.js"></script>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">3D Horse Inline</h3>
+  </div><!-- end panel heading  -->
+    <div class="panel-body">
+
+
+<h3>3D Horse Inline</h3>
+
+    <x3d id='someUniqueId' swfpath="{{ STATIC_URL }}x3dom/x3dom.swf" showStat='false' showLog='false' x='0px' y='0px' width='600px' height='400px'>
+      <scene>
+        <inline url="{{ STATIC_URL }}x3dom/horse.x3d" ></inline>
+      <scene>
+    </x3d>
+
+
+ </div><!-- end panel body  -->
+</div><!-- end panel  -->
+
+{% endblock %}
+
